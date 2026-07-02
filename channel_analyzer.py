@@ -1,26 +1,5 @@
+from app.services.comment_filter import filter_comments
 from app.services.youtube import get_comments, get_latest_videos
-
-
-def is_metadata_comment(comment):
-    text = comment.strip().lower()
-
-    if text.startswith("ml:"):
-        return True
-
-    if text.startswith("fl:"):
-        return True
-
-    if "ml:" in text and "fl:" in text:
-        return True
-
-    if text in ["first", "first one here", "first comment"]:
-        return True
-
-    return False
-
-
-def clean_comment_for_ai(comment):
-    return comment.replace("\n", " ").strip()
 
 
 def count_topic(comments, keywords):
@@ -58,18 +37,7 @@ for video in videos:
 print()
 print("Łącznie komentarzy:", len(all_comments))
 
-filtered_comments = []
-
-for comment in all_comments:
-    cleaned = clean_comment_for_ai(comment)
-
-    if is_metadata_comment(cleaned):
-        continue
-
-    if len(cleaned) < 8:
-        continue
-
-    filtered_comments.append(cleaned)
+filtered_comments = filter_comments(all_comments)
 
 print("Po filtrze:", len(filtered_comments))
 
