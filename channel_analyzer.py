@@ -11,17 +11,17 @@ for video in videos:
     print("\n==============================")
     print(video["title"])
 
-    comments = get_comments(video["video_id"])
+    comments = get_comments(video["video_id"], video["title"])
 
     print(f"Komentarzy: {len(comments)}")
 
     for comment in comments[:3]:
-        print("-", comment[:120])
+        print("-", comment["text"][:120])
 
 all_comments = []
 
 for video in videos:
-    comments = get_comments(video["video_id"])
+    comments = get_comments(video["video_id"], video["title"])
     all_comments.extend(comments)
 
 print()
@@ -34,8 +34,8 @@ print("Po filtrze:", len(filtered_comments))
 sample_comments = filtered_comments[:20]
 
 sample = "\n".join(
-    f"- {c}"
-    for c in sample_comments
+    f"- {comment['text']}"
+    for comment in sample_comments
 )
 
 print("Komentarzy wysłanych do Qwena:", len(sample_comments))
@@ -130,7 +130,7 @@ ai_mentions = 0
 print("Filmów do analizy:", len(videos))
 
 for comment in all_comments:
-    text = comment.lower()
+    text = comment["text"].lower()
 
     if any(word in text for word in ai_keywords):
         ai_mentions += 1

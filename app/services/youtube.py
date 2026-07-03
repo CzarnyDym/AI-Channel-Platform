@@ -48,7 +48,7 @@ def get_latest_videos(limit=10):
     return videos
 
 
-def get_comments(video_id):
+def get_comments(video_id, video_title=""):
     url = "https://www.googleapis.com/youtube/v3/commentThreads"
 
     params = {
@@ -66,9 +66,15 @@ def get_comments(video_id):
     data = response.json()
 
     comments = []
+    video_url = f"https://www.youtube.com/watch?v={video_id}"
 
     for item in data.get("items", []):
         comment = item["snippet"]["topLevelComment"]["snippet"]["textDisplay"]
-        comments.append(comment)
+        comments.append({
+            "text": comment,
+            "video_id": video_id,
+            "video_title": video_title,
+            "video_url": video_url
+        })
 
     return comments

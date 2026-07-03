@@ -21,10 +21,12 @@ def clean_comment_for_ai(comment):
 
 
 def should_keep_comment(comment):
-    if is_metadata_comment(comment):
+    text = comment["text"]
+
+    if is_metadata_comment(text):
         return False
 
-    if len(comment) < 8:
+    if len(text) < 8:
         return False
 
     return True
@@ -34,11 +36,14 @@ def filter_comments(comments):
     filtered_comments = []
 
     for comment in comments:
-        cleaned = clean_comment_for_ai(comment)
+        cleaned_comment = {
+            **comment,
+            "text": clean_comment_for_ai(comment["text"])
+        }
 
-        if not should_keep_comment(cleaned):
+        if not should_keep_comment(cleaned_comment):
             continue
 
-        filtered_comments.append(cleaned)
+        filtered_comments.append(cleaned_comment)
 
     return filtered_comments

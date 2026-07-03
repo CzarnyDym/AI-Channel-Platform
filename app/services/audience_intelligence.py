@@ -83,7 +83,7 @@ def _find_matching_comments(comments, keywords):
     matching_comments = []
 
     for comment in comments:
-        text = comment.lower()
+        text = comment["text"].lower()
 
         if any(keyword in text for keyword in keywords):
             matching_comments.append(comment)
