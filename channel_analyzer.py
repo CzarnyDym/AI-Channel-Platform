@@ -1,16 +1,6 @@
+from app.services.audience_intelligence import analyze_audience
 from app.services.comment_filter import filter_comments
 from app.services.youtube import get_comments, get_latest_videos
-
-
-def count_topic(comments, keywords):
-    count = 0
-
-    for comment in comments:
-        text = comment.lower()
-        if any(keyword in text for keyword in keywords):
-            count += 1
-
-    return count
 
 
 videos = get_latest_videos(20)
@@ -51,40 +41,19 @@ sample = "\n".join(
 print("Komentarzy wysłanych do Qwena:", len(sample_comments))
 
 
-ai_quality_count = count_topic(filtered_comments, [
-    "ai", "slop", "temu", "hogwarts", "harry potter"
-])
+audience_analysis = analyze_audience(filtered_comments)
 
-actor_praise_count = count_topic(filtered_comments, [
-    "love this male lead",
-    "love this ml",
-    "acting",
-    "actor",
-    "badass"
-])
+insight_counts = {
+    insight["id"]: insight["mentions"]
+    for category in ["liked", "disliked", "recurring_topics"]
+    for insight in audience_analysis[category]
+}
 
-story_criticism_count = count_topic(filtered_comments, [
-    "plot",
-    "story",
-    "far fetched",
-    "boring",
-    "secondary"
-])
-
-ending_criticism_count = count_topic(filtered_comments, [
-    "ending",
-    "rushed",
-    "not complete",
-    "incomplete"
-])
-
-humor_count = count_topic(filtered_comments, [
-    "funny",
-    "hilarious",
-    "killed me",
-    "😂",
-    "🤣"
-])
+ai_quality_count = insight_counts.get("ai_quality", 0)
+actor_praise_count = insight_counts.get("actor_praise", 0)
+story_criticism_count = insight_counts.get("story_criticism", 0)
+ending_criticism_count = insight_counts.get("ending_criticism", 0)
+humor_count = insight_counts.get("humor", 0)
 
 print("AI quality:", ai_quality_count)
 print("Actor praise:", actor_praise_count)
