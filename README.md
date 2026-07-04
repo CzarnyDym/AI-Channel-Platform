@@ -25,7 +25,7 @@ YouTube Service
 ## Project Structure
 
 - `app/services/` contains service modules for YouTube access, comment filtering, and audience intelligence.
-- `docs/` contains product and planning documentation, including [PRODUCT_VISION.md](docs/PRODUCT_VISION.md).
+- `docs/` contains public project documentation, currently including `PROJECT_OVERVIEW.md`.
 - `channel_analyzer.py` is the current end-to-end entry point for fetching videos, analyzing comments, and generating a Qwen/Ollama report.
 - `ai_report.py`, `ai_reviewer.py`, and `qwen_test.py` are supporting scripts for testing report prompts and local model behavior.
 
